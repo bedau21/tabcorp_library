@@ -1,0 +1,25 @@
+{
+  "name": "tabcorp_library",
+  "version": "1.0.0",
+  "description": "library storing books for tabcrop members",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "quy nguyen ngoc",
+  "license": "ISC",
+  "dependencies": {
+    "await-to-js": "^2.1.1",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.19",
+    "parse-error": "^0.2.0",
+    "validator": "^10.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
