@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Book } from 'src/app/models/book';
 import { BookService } from 'src/app/services/book.service';
 
@@ -13,6 +13,7 @@ export class BookComponent implements OnInit {
   books: Book[] = null;
   submitted = false;
   bookFormModel: Book = new Book();
+  maxLength = 30;
   categories = [
     { id: 1, name: 'Drama' },
     { id: 2, name: 'Comedy' },
@@ -25,11 +26,17 @@ export class BookComponent implements OnInit {
 
   ngOnInit() {
     this.bookForm = this.formBuilder.group({
-      title: ['', [Validators.required, Validators.maxLength(30)]],
-      category: ['', Validators.required],
-      description: ['', Validators.required],
+      title: ['', [Validators.required, this.noWhitespaceValidator]],
+      category: [this.categories[0].name, Validators.required],
+      description: ['', [Validators.required, this.noWhitespaceValidator]],
     });
     this.getBooks();
+  }
+
+  noWhitespaceValidator(control: FormControl) {
+    const isWhitespace = (control.value || '').trim().length === 0;
+    const isValid = !isWhitespace;
+    return isValid ? null : { 'whitespace': true };
   }
 
   get f() { return this.bookForm.controls; }
@@ -41,9 +48,8 @@ export class BookComponent implements OnInit {
     }
     this.bookService.createBook(this.bookForm.value).subscribe(res => {
       if (res['success']) {
-        this.bookForm.reset();
-        this.submitted = false;
         this.books.push(res['data']);
+        this.resetBookForm();
       } else {
         alert(res['message']);
       }
@@ -54,5 +60,11 @@ export class BookComponent implements OnInit {
     this.bookService.getBooks().subscribe(res => {
       res['success'] ? this.books = res['data'] : alert(res['message']);
     });
+  }
+
+  resetBookForm() {
+    this.bookForm.reset();
+    this.bookForm.get('category').setValue(this.categories[0].name);
+    this.submitted = false;
   }
 }

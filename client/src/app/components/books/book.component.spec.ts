@@ -43,8 +43,6 @@ describe('BookComponent', () => {
   });
 
   it('should call saveBook method'), async(() => {
-    fixture.detectChanges();
-    spyOn(component, 'saveBook');
     htmlElement = fixture.debugElement.query(By.css('add-book')).nativeElement;
     htmlElement.click();
     expect(component.saveBook).toHaveBeenCalledTimes(0);
@@ -64,7 +62,7 @@ describe('BookComponent', () => {
     expect(component.bookForm.valid).toBeFalsy();
   }));
 
-  it('form should be invalid', async(() => {
+  it('form should be valid', async(() => {
     component.bookForm.controls['title'].setValue('Gone Girl');
     component.bookForm.controls['category'].setValue('Drama');
     component.bookForm.controls['description'].setValue('text');
